@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/config_mysqli.php'; 
+require __DIR__ . '/config_mysqli.php';
 
 // เปิด session เพื่อใช้ CSRF token และ flash message
 if (session_status() === PHP_SESSION_NONE) {
@@ -64,9 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $stmt->bind_param("sss", $email, $display_name, $password_hash);
       if ($stmt->execute()) {
         $success = "สมัครสมาชิกสำเร็จ! คุณสามารถล็อกอินได้แล้วค่ะ";
-        // regenerate CSRF token หลังสำเร็จ
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        // เคลียร์ฟอร์ม
         $email = $display_name = "";
       } else {
         if ($mysqli->errno == 1062) {
@@ -88,21 +86,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body{font-family:system-ui, sans-serif; background:#f7f7fb; margin:0; padding:0;}
-    .container{max-width:480px; margin:40px auto; background:#fff; border-radius:16px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.06);}
-    h1{margin:0 0 16px;}
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: linear-gradient(135deg, #fce4ec, #f3e5f5, #e3f2fd);
+      margin:0; padding:0;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .float-emoji {
+      position: absolute;
+      top: -50px;
+      font-size: 30px;
+      opacity: 0;
+      animation: fall 10s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.9; }
+      90% { opacity: 0.9; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 5;
+      max-width:480px;
+      margin:40px auto;
+      background:#fff;
+      border-radius:16px;
+      padding:24px;
+      box-shadow:0 10px 30px rgba(0,0,0,.06);
+    }
+
+    h1{margin:0 0 16px; text-align:center; color:#f48fb1;}
     .alert{padding:12px 14px; border-radius:12px; margin-bottom:12px; font-size:14px;}
     .alert.error{background:#ffecec; color:#a40000; border:1px solid #ffc9c9;}
     .alert.success{background:#efffed; color:#0a7a28; border:1px solid #c9f5cf;}
     label{display:block; font-size:14px; margin:10px 0 6px;}
     input{width:100%; padding:12px; border-radius:12px; border:1px solid #ddd;}
-    button{width:100%; padding:12px; border:none; border-radius:12px; margin-top:14px; background:#3b82f6; color:#fff; font-weight:600; cursor:pointer;}
-    button:hover{filter:brightness(.95);}
+    button{
+      width:100%; padding:12px; border:none; border-radius:12px;
+      margin-top:14px; background:linear-gradient(90deg,#f8bbd0,#f48fb1);
+      color:#fff; font-weight:600; cursor:pointer; transition:transform .2s;
+    }
+    button:hover{transform:scale(1.03);}
     .hint{font-size:12px; color:#666;}
   </style>
 </head>
 <body>
+
+  <div class="float-emoji" style="left:10%; animation-delay:0s;">🧁</div>
+  <div class="float-emoji" style="left:25%; animation-delay:2s;">🌷</div>
+  <div class="float-emoji" style="left:45%; animation-delay:4s;">💫</div>
+  <div class="float-emoji" style="left:65%; animation-delay:1s;">🩷</div>
+  <div class="float-emoji" style="left:80%; animation-delay:3s;">🦄</div>
+
   <div class="container">
     <h1>สมัครสมาชิก</h1>
 
